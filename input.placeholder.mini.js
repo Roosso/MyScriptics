@@ -1,3 +1,9 @@
+/*
+http://www.black-web.ru
+http://habrahabr.ru/post/148945/
+Пользуйтесь, если надо.
+*/
+
 $(document).ready(function() {
     /* Placeholder for IE */
     if($.browser.msie) { // Условие для вызова только в IE
