@@ -87,7 +87,7 @@ AddType application/x-web-app-manifest+json webapp
 AddType text/x-vcard vcf
 AddType application/x-shockwave-flash swf
 AddType text/vtt vtt
-AddType application/octet-stream .doc .mov .avi .pdf .xls .rar .zip .mp3 .wmv .ppt
+AddType application/octet-stream .doc .mov .avi .pdf .xls .rar .zip .mp3 .wmv .ppt .tar .gz .docx .xlsx
 # ForceType application/x-httpd-php
 
 # INDEX FILE ________________
