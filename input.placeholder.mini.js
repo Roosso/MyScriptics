@@ -1,15 +1,15 @@
 /*
-http://www.black-web.ru
-http://habrahabr.ru/post/148945/
-Пользуйтесь, если надо.
-*/
+ * http://www.black-web.ru
+ * http://habrahabr.ru/post/148945/
+ * Пользуйтесь, если надо.
+ */
 
 $(document).ready(function() {
     /* Placeholder for IE */
-    if($.browser.msie) { // Условие для вызова только в IE
+    if($.browser.msie) {
         $("form").children("input[type='text']").each(function() {
             var tp = $(this).attr("placeholder");
-            $(this).attr('value',tp).css('color','#ccc');
+            if(tp != undefined) $(this).attr('value',tp).css('color','#ccc');
         }).focusin(function() {
             var val = $(this).attr('placeholder');
             if($(this).val() == val) {
