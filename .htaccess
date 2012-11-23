@@ -39,6 +39,24 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 	# RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 	# RewriteCond %{SERVER_PORT} !^443
 	# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+	
+	# Блокировать любой запрос, пытающийся испортить base64_encode через URL
+	RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [OR]
+	# Блокировать любой запрос, содержащий тег <script> в URL
+	RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
+	# Блокировать любой запрос, пытающийся установить значение глобальных переменных PHP через URL
+	RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+	# Блокировать любой запрос, пытающийся изменить _REQUEST переменную через URL
+	RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
+	# Перенаправлять заблокированные запросы
+	RewriteRule .* index.php [F]
+	
+	# и запрошенный путь не соответствует пути к физическому файлу
+	RewriteCond %{REQUEST_FILENAME} !-f
+	# и запрошенный путь не соответствует пути к физической папке
+	RewriteCond %{REQUEST_FILENAME} !-d
+	# то перенаправить запрос на скрипт index.php
+	RewriteRule .* index.php [L]
 </IfModule>
 
 
