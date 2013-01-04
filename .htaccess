@@ -7,6 +7,7 @@
 Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 #Options -MultiViews
 
+
 # REWRITE ___________________
 <IfModule mod_rewrite.c>
 	RewriteEngine on
@@ -16,6 +17,7 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 	RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php\ HTTP/
 	RewriteRule ^index\.php$ http://www.iblog.su/ [R=301,L]
 </IfModule>
+	
 	
 # REDIRICT __________________
 # Redirect 301 /index.html /index.php
@@ -39,6 +41,14 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 	# RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 	# RewriteCond %{SERVER_PORT} !^443
 	# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+	
+	
+	#	Внимание!
+	#	Данная конфигурация файла может порождать побочные запросы к индексному файлу вашего сайта
+	#	в случаях когда в вашей верстке или скриптах содержаться ошибки или ссылки на несуществующие файлы или папки.
+	#	Подобные обращения в большом числе могут вызвать нагрузку на ваш веб сервер. 1 ошибка = 1 лишнему обращению.
+	#	Будьте внимательны. Перед использованием данного файла проверьте файлы access.log и error.log сгенерированные вашим Apache сервером.
+	#	Если вы обнуружите ошибки в ваших скриптах, исправьте их перед использованием на "боевом сервере"
 	
 	# Блокировать любой запрос, пытающийся испортить base64_encode через URL
 	RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [OR]
@@ -66,6 +76,7 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 	# RewriteCond %{HTTP_REFERER} !^http://([ -a-z0-9]  \.)?ibog\.su [NC]
 	# RewriteRule \.(gif|jpe?g|png)$ - [F,NC,L]
 </IfModule>
+
 
 # HANDLER ___________________
 AddHandler application/x-httpd-php .html
@@ -108,8 +119,10 @@ AddType text/vtt vtt
 AddType application/octet-stream .doc .mov .avi .pdf .xls .rar .zip .mp3 .wmv .ppt .tar .gz .docx .xlsx
 # ForceType application/x-httpd-php
 
+
 # INDEX FILE ________________
 DirectoryIndex index.php
+
 
 # GZIP ______________________
 <IfModule mod_gzip.c>
@@ -126,29 +139,43 @@ DirectoryIndex index.php
 	AddOutputFilterByType DEFLATE text/html text/plain text/xml application/xml application/xhtml+xml text/css text/javascript application/javascript application/x-javascript application/x-font-woff image/jpg image/jpeg
 </ifModule>
 
+
 # PHP _______________________
 php_value	upload_max_filesize	32M
 php_value	post_max_size		10M
 php_value	default_charset utf-8
-# php_value	max_execution_time 200
+php_flag	magic_quotes_gpc Off
+php_flag	register_globals Off
+php_flag	short_open_tag On
 # php_value	max_input_time 200
-# php_flag register_globals Off
 # php_value session.name sid
-# php_flag magic_quotes_gpc Off
-# php_flag expose_php Off
-# php_value error_reporting -1
-# php_flag log_errors On
-# php_flag display_errors Off
-# php_flag display_startup_errors Off
-# php_flag html_errors Off
-# php_flag ignore_repeated_errors Off
-# php_flag ignore_repeated_source Off
-# php_value log_errors_max_len 1024
+
+php_value	error_reporting 0
+php_flag	display_startup_errors off
+php_flag	display_errors off
+php_flag	html_errors off
+php_flag	log_errors off
+php_flag	ignore_repeated_errors on
+php_flag	ignore_repeated_source on
+# php_value	log_errors_max_len 1024
+php_flag	report_memleaks off
+php_flag	track_errors off
+php_value	docref_root 0
+php_value	docref_ext 0
+# php_value	error_log /tmp/php_error.log
 # php_value error_prepend_string " "
 # php_value error_append_string " "
+
+<Files php_error.log>
+	Order allow,deny
+	Deny from all
+	Satisfy All
+</Files>
+
 <IfModule php5_module>
 	# php_value session.cookie_httponly true
 </IfModule>
+
 
 # OTHER SETTINGS ____________
 <IfModule mod_setenvif.c>
@@ -157,6 +184,7 @@ php_value	default_charset utf-8
 ServerSignature Off
 # AddDefaultCharset UTF-8
 # AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
+
 
 # CACHE AND Headers _________
 <ifModule mod_headers.c>
