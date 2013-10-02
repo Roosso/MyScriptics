@@ -3,6 +3,7 @@
 # Автор: Алекснадр Белов aka alex Roosso
 # Сайт: http://www.black-web.ru
 # ICQ: 3405729
+# Электропочта: roosso@yandex.ru
 
 Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 #Options -MultiViews
