@@ -24,11 +24,11 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 # Redirect 301 /index.html /index.php
 <IfModule mod_rewrite.c>
 	# RewriteRule ^news/([^/\.]+)/?$ news.php?news=$1 [L]
-	# RewriteRule ^(.*\.((js)|(css)))$ plugin/GzipFile.php?file=$1
+	# RewriteRule ^(.*\.((js)|(css)))$ plugin/GzipFile.php?file=$1 [QSA,NE,L]
 	# RewriteRule \.css$ plugin/GzipFile.php?file=$1
 	# RewriteRule \.js$ plugin/GzipFile.php?file=$1
 </IfModule>
-# RedirectMatch 301 /blog(.*) http://www.iblog.su/$1
+# RedirectMatch 301 /blog(.*) http://www.roocms.com/blog$1
 
 
 # SECURE ____________________
@@ -68,6 +68,8 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 	RewriteCond %{REQUEST_FILENAME} !-d
 	# то перенаправить запрос на скрипт index.php
 	RewriteRule .* index.php [L]
+	
+	RedirectMatch 301 regexp /error410.html
 </IfModule>
 
 
@@ -176,6 +178,14 @@ php_value	docref_ext 0
 <IfModule php5_module>
 	# php_value session.cookie_httponly true
 </IfModule>
+
+
+# XDEBUG ___________________
+# Настройки для расширения XDebug
+#php_flag	xdebug.profiler_enable On
+#php_flag	xdebug.extended_info On
+#php_flag	xdebug.remote_enable off
+#php_flag	xdebug.auto_trace off
 
 
 # OTHER SETTINGS ____________
