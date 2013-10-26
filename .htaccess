@@ -21,12 +21,29 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 	
 	
 # REDIRICT __________________
+#	301 простой редерикт
 # Redirect 301 /index.html /index.php
+#	http://www.roocms.com - URL На который мы перенаправляем запросы
+#	Полезно в случаях когда надо полностью перенаправлять людей с одного сайта на другой.
+# Redirect / http://www.roocms.com
 <IfModule mod_rewrite.c>
 	# RewriteRule ^news/([^/\.]+)/?$ news.php?news=$1 [L]
 	# RewriteRule ^(.*\.((js)|(css)))$ plugin/GzipFile.php?file=$1 [QSA,NE,L]
 	# RewriteRule \.css$ plugin/GzipFile.php?file=$1
 	# RewriteRule \.js$ plugin/GzipFile.php?file=$1
+	
+	#	Круглые скобки () используются для выделения групп символов. В дальнейшем к ним можно обращаться по номеру.
+	#	Символ ^ обозначает начало строки.
+	#	Символ $ обозначает конец строки.
+	#	Символ . обозначает любой символ.
+	#	Символ | обозначает альтернативу. Например, выражения "A|B" означают "A или B".
+	#	Символ ? ставится после символа (группы), который может как присутствовать, так и отсутствовать.
+	#	Символ * ставится после символа (группы), который может отсутствовать или присутствовать неограниченное число раз подряд.
+	#	Символ + действует аналогично символу * с той лишь разницей, что предшествующий ему символ обязательно должен присутствовать хотя бы один раз.
+	#	Квадратные скобки [] используются для перечисления допустимых символов.
+	#	Квадратные скобки [^] используются для перечисления недоступных символов.
+	#	Символ \ ставится перед спецсимволами, если они нужны в своем первозданном виде.
+	#	Все, что расположено после символа '#', считается комментарием.
 </IfModule>
 # RedirectMatch 301 /blog(.*) http://www.roocms.com/blog$1
 
@@ -43,6 +60,41 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 	# RewriteCond %{SERVER_PORT} !^443
 	# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 	
+	#	$n - (0 <= n <= 9) предоставляющие доступ к сгруппированным частям (в круглых скобках!) шаблона из соответствующей директивы RewriteRule (единственной, следующей сразу за текущим набором директив RewriteCond). 
+	#	%n - (1 <= n <= 9) предоставляющие доступ к сгруппированным частям (в круглых скобках!) шаблона из соответствующей директивы RewriteCond в текущем наборе условий.
+	#	%{NAME_OF_VARIABLE} - где NAME_OF_VARIABLE может быть одной из ниже приведенных переменных
+
+	#	HTTP_USER_AGENT	Содержит информацию о типе и версии браузера и операционной системы посетителя.
+	#	HTTP_REFERER	Приводится адрес страницы, с которой посетитель пришёл на данную страницу.
+	#	HTTP_COOKIE	Список COOKIE, передаваемых браузером
+	#	HTTP_FORWARDED	Страница непосредственно, с которой перешел пользователь
+	#	HTTP_HOST	Адрес сервера, например, roocms.com
+	#	HTTP_ACCEPT	Описываются предпочтения клиента относительно типа документа.
+	#	REMOTE_ADDR	IP-адрес посетителя.
+	#	REMOTE_HOST	адрес посетителя в нормальной форме — например, 23.beeline.ru
+	#	REMOTE_IDENT	Имя удаленного пользователя. Имеет формат имя.хост, например, starter.www.rutt.net.ru
+	#	REMOTE_USER	Тоже, что и REMOTE_IDENT, но содержит только имя. Пример: starter
+	#	REQUEST_METHOD	Позволяет определить тип запроса (GET или POST). Должен обязательно анализироваться, т.к. определяет дальнейший способ обработки информации
+	#	SCRIPT_FILENAME	Полный путь к веб-странице на сервере.
+	#	PATH_INFO	Содержит в себе все, что передавалось в скрипт.
+	#	QUERY_STRING	Содержит строчку, переданную в качестве запроса при вызове CGI скрипта.
+	#	AUTH_TYPE 	Используется для идентификации пользователя
+	#	DOCUMENT_ROOT	Cодержит путь к корневой директории сервера.
+	#	SERVER_ADMIN 	Почтовый адрес владельца сервера, указанный при установке.
+	#	SERVER_NAME	Адрес сервера, типа idea.roocms.com
+	#	SERVER_ADDR	IP-адрес вашего сайта.
+	#	SERVER_PORT	Порт, на котором работает Apache.
+	#	SERVER_PROTOCOL	Версия HTTP протокола.
+	#	SERVER_SOFTWARE	Название сервера, например, Apache/1.3.2 (Unix)
+	#	TIME_YEAR TIME_MON TIME_DAY TIME_HOUR TIME_MIN TIME_SEC TIME_WDAY TIME
+	#	Переменные предназначены для работы со временем в разных форматах.
+	#	API_VERSION	Это версия API модуля Apache (внутренний интерфейс между сервером и модулем) в текущей сборке сервера, что определено в include/ap_mmn.h.
+	#	THE_REQUEST Полная строка HTTP запроса отправленная браузером серверу (т.е., «GET /index.html HTTP/1.1»). Она не включает какие-либо дополнительные заголовки отправляемые браузером.
+	#	REQUEST_URI Ресурс, запрошенный в строке HTTP запроса.
+	#	REQUEST_FILENAME Полный путь в файловой системе сервера к файлу или скрипту соответствующим этому запросу.
+	#	IS_SUBREQ Будет содержать текст «true» если запрос выполняется в текущий момент как подзапрос, «false» в другом случае. Подзапросы могут быть сгенерированы модулями которым нужно иметь дело с дополнительными файлами или URI для того чтобы выполнить собственные задачи. 
+	
+	
 	
 	#	Внимание!
 	#	Данная конфигурация файла может порождать побочные запросы к индексному файлу вашего сайта
@@ -51,22 +103,22 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 	#	Будьте внимательны. Перед использованием данного файла проверьте файлы access.log и error.log сгенерированные вашим Apache сервером.
 	#	Если вы обнуружите ошибки в ваших скриптах, исправьте их перед использованием на "боевом сервере"
 	
-	# Блокировать любой запрос, пытающийся испортить base64_encode через URL
+	#	Блокировать любой запрос, пытающийся испортить base64_encode через URL
 	RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [OR]
-	# Блокировать любой запрос, содержащий тег <script> в URL
+	#	Блокировать любой запрос, содержащий тег <script> в URL
 	RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
-	# Блокировать любой запрос, пытающийся установить значение глобальных переменных PHP через URL
+	#	Блокировать любой запрос, пытающийся установить значение глобальных переменных PHP через URL
 	RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
-	# Блокировать любой запрос, пытающийся изменить _REQUEST переменную через URL
+	#	Блокировать любой запрос, пытающийся изменить _REQUEST переменную через URL
 	RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
-	# Перенаправлять заблокированные запросы
+	#	Перенаправлять заблокированные запросы
 	RewriteRule .* index.php [F]
 	
-	# и запрошенный путь не соответствует пути к физическому файлу
+	#	и запрошенный путь не соответствует пути к физическому файлу
 	RewriteCond %{REQUEST_FILENAME} !-f
-	# и запрошенный путь не соответствует пути к физической папке
+	#	и запрошенный путь не соответствует пути к физической папке
 	RewriteCond %{REQUEST_FILENAME} !-d
-	# то перенаправить запрос на скрипт index.php
+	#	то перенаправить запрос на скрипт index.php
 	RewriteRule .* index.php [L]
 	
 	RedirectMatch 301 regexp /error410.html
@@ -89,23 +141,23 @@ AddType application/json json
 AddType text/css .css
 AddType text/xml .xml
 AddType text/x-component .htc
-# Audio
+#	Audio
 AddType audio/ogg oga ogg
 AddType audio/mp4 m4a f4a f4b
-# Video
+#	Video
 AddType video/ogg ogv
 AddType video/mp4 mp4 m4v f4v f4p
 AddType video/webm webm
 AddType video/x-flv flv
-# SVG
+#	SVG
 AddType image/svg+xml svg svgz
 AddEncoding gzip svgz
-# Webfonts
+#	Webfonts
 AddType application/vnd.ms-fontobject eot
 AddType application/x-font-ttf ttf ttc
 AddType font/opentype otf
 AddType application/x-font-woff woff
-# Assorted types
+#	Assorted types
 AddType image/x-icon ico
 AddType image/webp webp
 AddType text/cache-manifest appcache manifest
@@ -181,7 +233,7 @@ php_value	docref_ext 0
 
 
 # XDEBUG ___________________
-# Настройки для расширения XDebug
+#	Настройки для расширения XDebug
 #php_flag	xdebug.profiler_enable On
 #php_flag	xdebug.extended_info On
 #php_flag	xdebug.remote_enable off
@@ -250,38 +302,38 @@ ServerSignature Off
 </ifModule>
 
 
-# Bad Rquest
+#	Bad Rquest
 ErrorDocument 400 /index.php?page=e400
 
-# Authorization Required
+#	Authorization Required
 ErrorDocument 401 /index.php?page=e401
 
-# Forbidden
+#	Forbidden
 ErrorDocument 403 /index.php?page=e403
 
-# Not found
+#	Not found
 ErrorDocument 404 /index.php?page=e404
 
-# Method Not Allowed
+#	Method Not Allowed
 ErrorDocument 405 /index.php?page=e405
 
-# Request Timed Out
+#	Request Timed Out
 ErrorDocument 408 /index.php?page=e408
 
-# Request URI Too Long
+#	Request URI Too Long
 ErrorDocument 414 /index.php?page=notfound
 
-# Internal Server Erro
+#	Internal Server Erro
 ErrorDocument 500 /index.php?page=notfound
 
-# Not Implemented
+#	Not Implemented
 ErrorDocument 501 /index.php?page=notfound
 
-# Bad Gateway 
+#	Bad Gateway 
 ErrorDocument 502 /index.php?page=notfound
 
-# Service Unavailable 
+#	Service Unavailable 
 ErrorDocument 503 /index.php?page=notfound
 
-# Gateway Timeout
+#	Gateway Timeout
 ErrorDocument 504 /index.php?page=notfound
