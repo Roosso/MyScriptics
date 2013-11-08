@@ -1,34 +1,36 @@
-# Этот .htaccess поможет сделать ваш сайт быстрей.
-# Пользуйтесь на здоровье себе и вашему сайту.
-# Автор: Алекснадр Белов aka alex Roosso
-# Сайт: http://www.black-web.ru
-# ICQ: 3405729
-# Электропочта: roosso@yandex.ru
+-# Этот .htaccess поможет сделать ваш сайт быстрей.
+-# Пользуйтесь на здоровье себе и вашему сайту.
+-# Автор: Алекснадр Белов aka alex Roosso
+-# Сайт: http://www.black-web.ru
+-# ICQ: 3405729
+-# Электропочта: roosso@yandex.ru
+
 
 Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 #Options -MultiViews
 
 
 # REWRITE ___________________
-<IfModule mod_rewrite.c>
+#<IfModule mod_rewrite.c>
 	RewriteEngine on
 	RewriteBase /
-	RewriteCond %{HTTP_HOST} ^iblog
-	RewriteRule (.*) http://www.iblog.su/$1 [R=301,L]
+	RewriteCond %{HTTP_HOST} ^roocms
+	RewriteRule (.*) http://www.roocms.com/$1 [R=301,L]
 	RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php\ HTTP/
-	RewriteRule ^index\.php$ http://www.iblog.su/ [R=301,L]
-</IfModule>
-	
-	
-# REDIRICT __________________
-#	301 простой редерикт
-# Redirect 301 /index.html /index.php
-#	http://www.roocms.com - URL На который мы перенаправляем запросы
-#	Полезно в случаях когда надо полностью перенаправлять людей с одного сайта на другой.
-# Redirect / http://www.roocms.com
+	RewriteRule ^index\.php$ http://www.roocms.com/ [R=301,L]
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.*)$ index.php [L,QSA]
+#</IfModule>
+
+
+# REDIRICT & REWRITE ________
 <IfModule mod_rewrite.c>
+	# RewriteRule ^basket(.*)$ ?page=demo$1 [QSA,NE,L]
+	# RewriteRule ^(([^/]+/)*[^.]+)/$ /index.php?page=$1 [L]
+	# RewriteRule ^(([^/]+/)*[^.]+)$ /index.php?page=$1 [L]
 	# RewriteRule ^news/([^/\.]+)/?$ news.php?news=$1 [L]
-	# RewriteRule ^(.*\.((js)|(css)))$ plugin/GzipFile.php?file=$1 [QSA,NE,L]
+	# RewriteRule ^(.*\.((js)|(css)))$ plugin/GzipFile.php?file=$1
 	# RewriteRule \.css$ plugin/GzipFile.php?file=$1
 	# RewriteRule \.js$ plugin/GzipFile.php?file=$1
 	
@@ -44,91 +46,57 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 	#	Квадратные скобки [^] используются для перечисления недоступных символов.
 	#	Символ \ ставится перед спецсимволами, если они нужны в своем первозданном виде.
 	#	Все, что расположено после символа '#', считается комментарием.
-</IfModule>
-# RedirectMatch 301 /blog(.*) http://www.roocms.com/blog$1
 
+</IfModule>
+# RedirectMatch 301 /blog(.*) http://www.roocms.com/$1
+# Redirect 301 /index.html /index.php
 
 # SECURE ____________________
 <IfModule mod_ssl.c>
 	# SSLOptions +StrictRequire
 	# SSLRequireSSL
-	# SSLRequire %{HTTP_HOST} eq "iblog.su"
+	# SSLRequire %{HTTP_HOST} eq "roocms.com"
 </IfModule>
 <IfModule mod_rewrite.c>
 	# RewriteCond %{HTTPS} !on
 	# RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 	# RewriteCond %{SERVER_PORT} !^443
 	# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
-	
-	#	$n - (0 <= n <= 9) предоставляющие доступ к сгруппированным частям (в круглых скобках!) шаблона из соответствующей директивы RewriteRule (единственной, следующей сразу за текущим набором директив RewriteCond). 
-	#	%n - (1 <= n <= 9) предоставляющие доступ к сгруппированным частям (в круглых скобках!) шаблона из соответствующей директивы RewriteCond в текущем наборе условий.
-	#	%{NAME_OF_VARIABLE} - где NAME_OF_VARIABLE может быть одной из ниже приведенных переменных
 
-	#	HTTP_USER_AGENT	Содержит информацию о типе и версии браузера и операционной системы посетителя.
-	#	HTTP_REFERER	Приводится адрес страницы, с которой посетитель пришёл на данную страницу.
-	#	HTTP_COOKIE	Список COOKIE, передаваемых браузером
-	#	HTTP_FORWARDED	Страница непосредственно, с которой перешел пользователь
-	#	HTTP_HOST	Адрес сервера, например, roocms.com
-	#	HTTP_ACCEPT	Описываются предпочтения клиента относительно типа документа.
-	#	REMOTE_ADDR	IP-адрес посетителя.
-	#	REMOTE_HOST	адрес посетителя в нормальной форме — например, 23.beeline.ru
-	#	REMOTE_IDENT	Имя удаленного пользователя. Имеет формат имя.хост, например, starter.www.rutt.net.ru
-	#	REMOTE_USER	Тоже, что и REMOTE_IDENT, но содержит только имя. Пример: starter
-	#	REQUEST_METHOD	Позволяет определить тип запроса (GET или POST). Должен обязательно анализироваться, т.к. определяет дальнейший способ обработки информации
-	#	SCRIPT_FILENAME	Полный путь к веб-странице на сервере.
-	#	PATH_INFO	Содержит в себе все, что передавалось в скрипт.
-	#	QUERY_STRING	Содержит строчку, переданную в качестве запроса при вызове CGI скрипта.
-	#	AUTH_TYPE 	Используется для идентификации пользователя
-	#	DOCUMENT_ROOT	Cодержит путь к корневой директории сервера.
-	#	SERVER_ADMIN 	Почтовый адрес владельца сервера, указанный при установке.
-	#	SERVER_NAME	Адрес сервера, типа idea.roocms.com
-	#	SERVER_ADDR	IP-адрес вашего сайта.
-	#	SERVER_PORT	Порт, на котором работает Apache.
-	#	SERVER_PROTOCOL	Версия HTTP протокола.
-	#	SERVER_SOFTWARE	Название сервера, например, Apache/1.3.2 (Unix)
-	#	TIME_YEAR TIME_MON TIME_DAY TIME_HOUR TIME_MIN TIME_SEC TIME_WDAY TIME
-	#	Переменные предназначены для работы со временем в разных форматах.
-	#	API_VERSION	Это версия API модуля Apache (внутренний интерфейс между сервером и модулем) в текущей сборке сервера, что определено в include/ap_mmn.h.
-	#	THE_REQUEST Полная строка HTTP запроса отправленная браузером серверу (т.е., «GET /index.html HTTP/1.1»). Она не включает какие-либо дополнительные заголовки отправляемые браузером.
-	#	REQUEST_URI Ресурс, запрошенный в строке HTTP запроса.
-	#	REQUEST_FILENAME Полный путь в файловой системе сервера к файлу или скрипту соответствующим этому запросу.
-	#	IS_SUBREQ Будет содержать текст «true» если запрос выполняется в текущий момент как подзапрос, «false» в другом случае. Подзапросы могут быть сгенерированы модулями которым нужно иметь дело с дополнительными файлами или URI для того чтобы выполнить собственные задачи. 
-	
-	
-	
+
 	#	Внимание!
 	#	Данная конфигурация файла может порождать побочные запросы к индексному файлу вашего сайта
 	#	в случаях когда в вашей верстке или скриптах содержаться ошибки или ссылки на несуществующие файлы или папки.
 	#	Подобные обращения в большом числе могут вызвать нагрузку на ваш веб сервер. 1 ошибка = 1 лишнему обращению.
 	#	Будьте внимательны. Перед использованием данного файла проверьте файлы access.log и error.log сгенерированные вашим Apache сервером.
 	#	Если вы обнуружите ошибки в ваших скриптах, исправьте их перед использованием на "боевом сервере"
-	
-	#	Блокировать любой запрос, пытающийся испортить base64_encode через URL
+
+	# Блокировать любой запрос, пытающийся испортить base64_encode через URL
 	RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [OR]
-	#	Блокировать любой запрос, содержащий тег <script> в URL
+	# Блокировать любой запрос, содержащий тег <script> в URL
 	RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
-	#	Блокировать любой запрос, пытающийся установить значение глобальных переменных PHP через URL
+	# Блокировать любой запрос, пытающийся установить значение глобальных переменных PHP через URL
 	RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
-	#	Блокировать любой запрос, пытающийся изменить _REQUEST переменную через URL
+	# Блокировать любой запрос, пытающийся изменить _REQUEST переменную через URL
 	RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
-	#	Перенаправлять заблокированные запросы
+	# Перенаправлять заблокированные запросы
 	RewriteRule .* index.php [F]
-	
-	#	и запрошенный путь не соответствует пути к физическому файлу
+
+	# и запрошенный путь не соответствует пути к физическому файлу
 	RewriteCond %{REQUEST_FILENAME} !-f
-	#	и запрошенный путь не соответствует пути к физической папке
+	# и запрошенный путь не соответствует пути к физической папке
 	RewriteCond %{REQUEST_FILENAME} !-d
-	#	то перенаправить запрос на скрипт index.php
+	# то перенаправить запрос на скрипт index.php
 	RewriteRule .* index.php [L]
-	
-	RedirectMatch 301 regexp /error410.html
+
+	RedirectMatch 301 regexp /index.php?page=e410
 </IfModule>
 
 
 # HOTLINKING ________________
 <IfModule mod_rewrite.c>
 	# RewriteCond %{HTTP_REFERER} !^$
-	# RewriteCond %{HTTP_REFERER} !^http://([ -a-z0-9]  \.)?ibog\.su [NC]
+	# RewriteCond %{HTTP_REFERER} !^http://([ -a-z0-9]  \.)?roocms\.com [NC]
 	# RewriteRule \.(gif|jpe?g|png)$ - [F,NC,L]
 </IfModule>
 
@@ -141,23 +109,23 @@ AddType application/json json
 AddType text/css .css
 AddType text/xml .xml
 AddType text/x-component .htc
-#	Audio
+# Audio
 AddType audio/ogg oga ogg
 AddType audio/mp4 m4a f4a f4b
-#	Video
+# Video
 AddType video/ogg ogv
 AddType video/mp4 mp4 m4v f4v f4p
 AddType video/webm webm
 AddType video/x-flv flv
-#	SVG
+# SVG
 AddType image/svg+xml svg svgz
 AddEncoding gzip svgz
-#	Webfonts
+# Webfonts
 AddType application/vnd.ms-fontobject eot
 AddType application/x-font-ttf ttf ttc
 AddType font/opentype otf
 AddType application/x-font-woff woff
-#	Assorted types
+# Assorted types
 AddType image/x-icon ico
 AddType image/webp webp
 AddType text/cache-manifest appcache manifest
@@ -171,7 +139,7 @@ AddType application/x-web-app-manifest+json webapp
 AddType text/x-vcard vcf
 AddType application/x-shockwave-flash swf
 AddType text/vtt vtt
-AddType application/octet-stream .doc .mov .avi .pdf .xls .rar .zip .mp3 .wmv .ppt .tar .gz .docx .xlsx
+# AddType application/octet-stream .doc .mov .avi .pdf .xls .rar .zip .mp3 .wmv .ppt .tar .gz .docx .xlsx
 # ForceType application/x-httpd-php
 
 
@@ -197,13 +165,14 @@ DirectoryIndex index.php
 
 # PHP _______________________
 php_value	upload_max_filesize	32M
-php_value	post_max_size		10M
+php_value	post_max_size		32M
 php_value	default_charset utf-8
 php_flag	magic_quotes_gpc Off
 php_flag	register_globals Off
 php_flag	short_open_tag On
+# php_value 	sendmail_from root@roocms.ru
 # php_value	max_input_time 200
-# php_value session.name sid
+# php_value	session.name sid
 
 php_value	error_reporting 0
 php_flag	display_startup_errors off
@@ -217,9 +186,13 @@ php_flag	report_memleaks off
 php_flag	track_errors off
 php_value	docref_root 0
 php_value	docref_ext 0
+#php_value	arg_separator.input &#
 # php_value	error_log /tmp/php_error.log
-# php_value error_prepend_string " "
-# php_value error_append_string " "
+# php_value	error_prepend_string " "
+# php_value	error_append_string " "
+# php_value	auto_prepend_file prepend.php
+# php_value	auto_append_file append.php
+#php_value	user_agent “Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)”
 
 <Files php_error.log>
 	Order allow,deny
@@ -233,7 +206,6 @@ php_value	docref_ext 0
 
 
 # XDEBUG ___________________
-#	Настройки для расширения XDebug
 #php_flag	xdebug.profiler_enable On
 #php_flag	xdebug.extended_info On
 #php_flag	xdebug.remote_enable off
@@ -245,21 +217,25 @@ php_value	docref_ext 0
 	SetEnv TZ Europe/Moscow
 </IfModule>
 ServerSignature Off
-# AddDefaultCharset UTF-8
-# AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
+AddDefaultCharset UTF-8
+AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
 
 # CACHE AND Headers _________
 <ifModule mod_headers.c>
+#кэшировать html и htm файлы на один день
 	<FilesMatch "\.(html|htm)$">
 		Header set Cache-Control "max-age=43200"
 	</FilesMatch>
+	#кэшировать css, javascript и текстовые файлы на одну неделю
 	<FilesMatch "\.(js|css|txt)$">
 		Header set Cache-Control "max-age=604800"
 	</FilesMatch>
+	#кэшировать флэш и изображения на месяц
 	<FilesMatch "\.(flv|swf|ico|gif|jpg|jpeg|png|jpe?g)$">
 		Header set Cache-Control "max-age=2592000"
 	</FilesMatch>
+	#отключить кэширование
 	<FilesMatch "\.(pl|php|cgi|spl|scgi|fcgi)$">
 		Header unset Cache-Control
 	</FilesMatch>
@@ -269,7 +245,7 @@ ServerSignature Off
 	<FilesMatch "\.(js|css|gif|png|jpe?g|pdf|xml|oga|ogg|m4a|ogv|mp4|m4v|webm|svg|svgz|eot|ttf|otf|woff|ico|webp|appcache|manifest|htc|crx|oex|xpi|safariextz|vcf)$" >
 		Header unset X-UA-Compatible
 	</FilesMatch>
-</IfModule>
+</ifModule>
 <ifModule mod_expires.c>
 	ExpiresActive On
 	ExpiresDefault "access plus 5 seconds"
@@ -302,38 +278,29 @@ ServerSignature Off
 </ifModule>
 
 
-#	Bad Rquest
+# Bad Rquest
 ErrorDocument 400 /index.php?page=e400
-
-#	Authorization Required
+# Authorization Required
 ErrorDocument 401 /index.php?page=e401
-
-#	Forbidden
+# Forbidden
 ErrorDocument 403 /index.php?page=e403
-
-#	Not found
+# Not found
 ErrorDocument 404 /index.php?page=e404
-
-#	Method Not Allowed
+# Method Not Allowed
 ErrorDocument 405 /index.php?page=e405
-
-#	Request Timed Out
+# Request Timed Out
 ErrorDocument 408 /index.php?page=e408
-
-#	Request URI Too Long
-ErrorDocument 414 /index.php?page=notfound
-
-#	Internal Server Erro
-ErrorDocument 500 /index.php?page=notfound
-
-#	Not Implemented
-ErrorDocument 501 /index.php?page=notfound
-
-#	Bad Gateway 
-ErrorDocument 502 /index.php?page=notfound
-
-#	Service Unavailable 
-ErrorDocument 503 /index.php?page=notfound
-
-#	Gateway Timeout
-ErrorDocument 504 /index.php?page=notfound
+# Conflict
+ErrorDocument 409 /index.php?page=e409
+# Request URI Too Long
+ErrorDocument 414 /index.php?page=e414
+# Internal Server Erro
+ErrorDocument 500 /e/e500.html
+# Not Implemented
+ErrorDocument 501 /e/e501.html
+# Bad Gateway
+ErrorDocument 502 /e/e502.html
+# Service Unavailable
+ErrorDocument 503 /e/e503.html
+# Gateway Timeout
+ErrorDocument 504 /e/e504.html
