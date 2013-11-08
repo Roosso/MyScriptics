@@ -13,10 +13,13 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 <IfModule mod_rewrite.c>
 	RewriteEngine on
 	RewriteBase /
-	RewriteCond %{HTTP_HOST} ^iblog
-	RewriteRule (.*) http://www.iblog.su/$1 [R=301,L]
+	RewriteCond %{HTTP_HOST} ^roocms
+	RewriteRule (.*) http://www.roocms.com/$1 [R=301,L]
 	RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php\ HTTP/
-	RewriteRule ^index\.php$ http://www.iblog.su/ [R=301,L]
+	RewriteRule ^index\.php$ http://www.roocms.com/ [R=301,L]
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.*)$ index.php [L,QSA]
 </IfModule>
 	
 	
