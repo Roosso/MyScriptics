@@ -140,40 +140,39 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 AddHandler application/x-httpd-php .html
 AddHandler cgi-script .pl .py .jsp .asp .htm .shtml .sh .cgi
 AddType application/x-javascript .js
-AddType application/json json
+AddType application/json .json
 AddType text/css .css
 AddType text/xml .xml
-AddType text/x-component .htc
 #	Audio
-AddType audio/ogg oga ogg
-AddType audio/mp4 m4a f4a f4b
+AddType audio/ogg .oga .ogg
+AddType audio/mp4 .m4a .f4a .f4b
 #	Video
-AddType video/ogg ogv
-AddType video/mp4 mp4 m4v f4v f4p
-AddType video/webm webm
-AddType video/x-flv flv
+AddType video/ogg .ogv
+AddType video/mp4 .mp4 .m4v .f4v .f4p
+AddType video/webm .webm
+AddType video/x-flv .flv
 #	SVG
-AddType image/svg+xml svg svgz
-AddEncoding gzip svgz
+AddType image/svg+xml .svg .svgz
+AddEncoding gzip .svgz
 #	Webfonts
-AddType application/vnd.ms-fontobject eot
-AddType application/x-font-ttf ttf ttc
-AddType font/opentype otf
-AddType application/x-font-woff woff
+AddType application/vnd.ms-fontobject .eot
+AddType application/x-font-ttf .ttf .ttc
+AddType font/opentype .otf
+AddType application/x-font-woff .woff
 #	Assorted types
-AddType image/x-icon ico
-AddType image/webp webp
-AddType text/cache-manifest appcache manifest
-AddType text/x-component htc
-AddType application/xml rss atom xml rdf
-AddType application/x-chrome-extension crx
-AddType application/x-opera-extension oex
-AddType application/x-xpinstall xpi
-AddType application/octet-stream safariextz
-AddType application/x-web-app-manifest+json webapp
-AddType text/x-vcard vcf
-AddType application/x-shockwave-flash swf
-AddType text/vtt vtt
+AddType image/x-icon .ico
+AddType image/webp .webp
+AddType text/cache-manifest .appcache .manifest
+AddType text/x-component .htc
+AddType application/xml .rss .atom .xml .rdf
+AddType application/x-chrome-extension .crx
+AddType application/x-opera-extension .oex
+AddType application/x-xpinstall .xpi
+AddType application/octet-stream .safariextz
+AddType application/x-web-app-manifest+json .webapp
+AddType text/x-vcard .vcf
+AddType application/x-shockwave-flash .swf
+AddType text/vtt .vtt
 AddType application/octet-stream .doc .mov .avi .pdf .xls .rar .zip .mp3 .wmv .ppt .tar .gz .docx .xlsx
 # ForceType application/x-httpd-php
 
