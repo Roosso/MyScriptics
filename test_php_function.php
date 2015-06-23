@@ -6,7 +6,6 @@
  */
 
 $total = 5000;
-
 // Генерим массив
 $array = array();
 for ($j = 0; $j < $total; $j++) {
@@ -16,7 +15,7 @@ for ($j = 0; $j < $total; $j++) {
 // Проверяем in_array
 $s = microtime(true);
 for ($j = 0; $j < $total; $j++) {
-	in_array("555", $array);
+	in_array("a555", $array);
 }
 echo "in_array: " . (microtime(true) - $s) . "\n";
 
@@ -38,5 +37,25 @@ for ($j = 0; $j < $total; $j++) {
 	if(isset($array[555])) $c = true;
 }
 echo "<br />isset:     " . (microtime(true) - $s) . "\n";
+
+// Проверяем isset через foreach
+$s = microtime(true);
+for ($j = 0; $j < $total; $j++) {
+	foreach($array AS $k=>$v) {
+		if(isset($v) && $v == "a555") $c = true;
+	}
+
+}
+echo "<br />foreach isset:     " . (microtime(true) - $s) . "\n";
+
+// Проверяем Просто foreach
+$s = microtime(true);
+for ($j = 0; $j < $total; $j++) {
+	foreach($array AS $k=>$v) {
+		if($v == "a555") $c = true;
+	}
+
+}
+echo "<br />foreach:     " . (microtime(true) - $s) . "\n";
 
 ?>
