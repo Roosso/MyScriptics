@@ -204,6 +204,7 @@ php_value	default_charset utf-8
 php_flag	magic_quotes_gpc Off
 php_flag	register_globals Off
 php_flag	short_open_tag On
+# php_flag	display_errors on
 # php_value	max_input_time 200
 # php_value session.name sid
 
