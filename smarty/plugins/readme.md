@@ -7,4 +7,4 @@ get_params
 
 Пример
 ---
-> <a href="index.php?page={$page}{get_params prefix='&amp;' exclude='page'}">{$page}</a>
+> `<a href="index.php?page={$page}{get_params prefix='&amp;' exclude='page'}">{$page}</a>`
