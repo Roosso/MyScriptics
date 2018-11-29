@@ -111,6 +111,12 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 	RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [OR]
 	#	Блокировать любой запрос, содержащий тег <script> в URL
 	RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
+	# 	Блокировать любой запрос, содержащий тег <iframe> в URL
+	RewriteCond %{QUERY_STRING} (<|%3C).*iframe.*(>|%3E) [NC,OR]
+	# 	Блокировать любой запрос, содержащий jacascript в URL
+	RewriteCond %{QUERY_STRING} (javascript:).*(;).* [NC]
+	# 	Блокировать любой запрос, содержащий попытку инъекции БД в URL
+	RewriteCond %{QUERY_STRING} (;|'|"|%22).*(union|select|insert|drop|update|md5|benchmark|or|and|if).* [NC]
 	#	Блокировать любой запрос, пытающийся установить значение глобальных переменных PHP через URL
 	RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
 	#	Блокировать любой запрос, пытающийся изменить _REQUEST переменную через URL
