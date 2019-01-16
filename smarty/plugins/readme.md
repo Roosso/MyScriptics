@@ -8,3 +8,13 @@ get_params
 Пример
 ---
 > `<a href="index.php?page={$page}{get_params prefix='&amp;' exclude='page'}">{$page}</a>`
+
+highlight
+---
+Позволяет выделять в тексте определенные сегменты тегом mark
+Пригодится если в большом тексте надо будет выделить какое либо слово или фразу.
+Регистронезависим
+
+Пример
+---
+> `{$data['text']|highlight:$word}`
