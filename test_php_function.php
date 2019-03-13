@@ -1,7 +1,7 @@
 <?php
 /**
  * This small script will tell you which of the PHP functions how much they eat resources and spend time.
- * It will help not to use super productive functions.
+ * It will help not to use super productive functions.
  * I advise you to test on localhost.
  */
 
