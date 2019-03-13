@@ -57,5 +57,3 @@ for ($j = 0; $j < $total; $j++) {
 
 }
 echo "<br />foreach:     " . (microtime(true) - $s) . "\n";
-
-?>
