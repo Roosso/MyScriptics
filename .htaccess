@@ -30,6 +30,7 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 # Redirect / http://www.roocms.com
 #	http://www.roocms.com - URL На который мы перенаправляем запросы
 #	Полезно в случаях когда надо полностью перенаправлять людей с одного сайта на другой.
+#       Но "грубо" потому что с любого адреса старого сайта, пользователя будет приземлять на главную новго. В случае переезда, лучше все же использовать RewriteRule
 # Redirect 410 /index.html
 # 	Если страница удалена, сообщим поисковику.
 <IfModule mod_rewrite.c>
