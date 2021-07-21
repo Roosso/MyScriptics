@@ -5,8 +5,8 @@ My Scriptics
 * `smarty/plugin` - удобный плагин для Smarty 3. Подробности в readme.md в папке с плагином
 * `test_php_function` - Этот маленький скриптик подскажет какие из функций PHP сколько поедают ресурсов и затрачивают времени.
 
-P.S.
+...and
 ====
-Пожалуйста, оцените мой проект 
+Please, see my open-source cms
 
 [![RooCMS](http://version.roocms.com/logo.png)](https://github.com/RooCMS/RooCMS)
