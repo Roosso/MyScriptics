@@ -1,9 +1,7 @@
 # Этот .htaccess поможет сделать ваш сайт быстрей.
 # Пользуйтесь на здоровье себе и вашему сайту.
 # Автор: Александр Белов aka alex Roosso
-# Сайт: http://www.black-web.ru
-# ICQ: 3405729
-# Электропочта: roosso@yandex.ru
+
 
 Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 #Options -MultiViews
@@ -38,6 +36,11 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 	# RewriteRule ^(.*\.((js)|(css)))$ plugin/GzipFile.php?file=$1 [QSA,NE,L]
 	# RewriteRule \.css$ plugin/GzipFile.php?file=$1
 	# RewriteRule \.js$ plugin/GzipFile.php?file=$1
+	# RewriteRule ^target/(.*)$ ?target=$1 [QSA,NE,L]
+	# RewriteRule ^(([^/]+/)*[^.]+)$ /index.php?arg=$1 [QSA,NE,L]
+	# RewriteRule ^blank(.*)$ ?arg=var$1 [QSA,NE,L]
+	# RewriteRule ^(([^/]+/)*[^.]+)/$ /index.php?page=$1 [L]
+	# RewriteRule ^(([^/]+/)*[^.]+)$ /index.php?page=$1 [L]
 	
 	#	Круглые скобки () используются для выделения групп символов. В дальнейшем к ним можно обращаться по номеру.
 	#	Символ ^ обозначает начало строки.
@@ -52,7 +55,15 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 	#	Символ \ ставится перед спецсимволами, если они нужны в своем первозданном виде.
 	#	Все, что расположено после символа '#', считается комментарием.
 </IfModule>
+
+# Маска
 # RedirectMatch 301 /blog(.*) http://www.roocms.com/blog$1
+
+# Без маски
+# Redirect 301 /index.html /index.php
+
+# Если страница удалена, сообщим поисковику.
+# Redirect 410 /index.html
 
 
 # SECURE ____________________
@@ -242,31 +253,33 @@ DirectoryIndex index.php
 
 
 # PHP _______________________
-php_value	upload_max_filesize	32M
-php_value	post_max_size		10M
-php_value	default_charset utf-8
-php_flag	magic_quotes_gpc Off
-php_flag	register_globals Off
-php_flag	short_open_tag On
-# php_flag	display_errors on
-# php_value	max_input_time 200
-# php_value session.name sid
+<IfModule mod_php.c>
+	php_value	upload_max_filesize	64M
+	php_value	post_max_size		64M
+	php_value	default_charset utf-8
+	php_flag	magic_quotes_gpc Off
+	php_flag	register_globals Off
+	php_flag	short_open_tag On
+	# php_value 	sendmail_from root@roocms.com
+	# php_value	max_input_time 200
+	# php_value	session.name sid
 
-php_value	error_reporting 0
-php_flag	display_startup_errors off
-php_flag	display_errors off
-php_flag	html_errors off
-php_flag	log_errors off
-php_flag	ignore_repeated_errors on
-php_flag	ignore_repeated_source on
-# php_value	log_errors_max_len 1024
-php_flag	report_memleaks off
-php_flag	track_errors off
-php_value	docref_root 0
-php_value	docref_ext 0
-# php_value	error_log /tmp/php_error.log
-# php_value error_prepend_string " "
-# php_value error_append_string " "
+	php_value	error_reporting 0
+	php_flag	display_startup_errors off
+	php_flag	display_errors off
+	php_flag	html_errors off
+	php_flag	log_errors off
+	php_flag	ignore_repeated_errors on
+	php_flag	ignore_repeated_source on
+	# php_value	log_errors_max_len 1024
+	php_flag	report_memleaks off
+	php_flag	track_errors off
+	php_value	docref_root 0
+	php_value	docref_ext 0
+	# php_value	error_log /tmp/php_error.log
+	# php_value error_prepend_string " "
+	# php_value error_append_string " "
+</IfModule>
 
 <Files php_error.log>
 	Order allow,deny
@@ -521,3 +534,4 @@ ErrorDocument 504 /index.php?page=notfound
 # Если лень делать страницу, можно просто показывать текстовое сообщение, которое
 # обязательно должно начинаться с кавычки, кавычка в сообщении не выводится:
 # ErrorDocument 403 "Простите. У вас нет доступа!"
+
